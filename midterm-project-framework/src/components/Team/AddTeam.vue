@@ -34,10 +34,6 @@
                     :rules="rules"
                     v-model="teamName"
                   ></v-text-field>
-                  <!-- <v-file-input
-                    label="Team Image"
-                    prepend-icon="mdi-camera"
-                  ></v-file-input> -->
                 </v-col>
               </v-row>
             </v-container>

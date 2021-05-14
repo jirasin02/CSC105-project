@@ -26,10 +26,19 @@
                 mdi-chevron-right
               </v-icon>
             </v-btn>
-            <v-toolbar-title v-if="$refs.calendar">
+            <v-toolbar-title v-if="$refs.calendar" class="ml-2">
               {{ $refs.calendar.title }}
             </v-toolbar-title>
             <v-spacer></v-spacer>
+            <v-btn
+              outlined
+              class="mr-4"
+              color="grey lighten-1"
+              @click="setType"
+              v-if="typeCheck"
+            >
+              back
+            </v-btn>
             <NewEvent />
           </v-toolbar>
         </v-sheet>
@@ -38,7 +47,8 @@
             ref="calendar"
             v-model="focus"
             color="primary"
-            type="month"
+            :type="type"
+            :event-margin-bottom="margin"
             :events="events"
             @click:event="showEvent"
             @click:more="showMoreEvent"
@@ -70,26 +80,6 @@
         </v-sheet>
       </v-col>
     </v-row>
-    <!-- <v-dialog v-model="dialog" persistent max-width="600px" scrollable>
-      <v-card>
-        <v-card-title class="ml-2 my-2">
-          <span>Events</span>
-        </v-card-title>
-        <div class="px-6">
-          <v-list>
-            <v-icon color="light-green">mdi-circle-medium</v-icon>
-            {{ selectedEvent.start }}
-          </v-list>
-          <v-divider class="mx-6 my-1"></v-divider>
-        </div>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="grey darken-2" text plain @click="close">
-            Close
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog> -->
   </div>
 </template>
 
@@ -113,6 +103,9 @@ export default {
     selectedOpen: false,
     events: [],
     dialog: false,
+    type: "month",
+    typeCheck: false,
+    margin: 1,
   }),
 
   methods: {
@@ -141,11 +134,17 @@ export default {
       }
       nativeEvent.stopPropagation();
     },
-    showMoreEvent() {
-      this.dialog = true;
+    showMoreEvent({ date }) {
+      this.type = "week";
+      this.focus = date;
+      this.typeCheck = true;
     },
     close() {
       this.dialog = false;
+    },
+    setType() {
+      this.type = "month";
+      this.typeCheck = false;
     },
   },
 };
